@@ -16,10 +16,10 @@ POSTGRES_CONNECTION_STRING=Server=127.0.0.1;Port=5432;Database=your_database_nam
 ```
 
 ## Running The API
-Once set up, simply run dotnet run in the ShipIt directory.
+Once set up, simply run `dotnet run` in the ShipIt directory.
 
 ## Running The Tests
-To run the tests you should be able to run dotnet test in the ShipItTests directory.
+To run the tests you should be able to run `dotnet test` in the ShipItTests directory.
 
 ## Deploying to Production
 TODO
