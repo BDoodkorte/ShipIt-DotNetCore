@@ -28,6 +28,10 @@ namespace ShipIt.Controllers
 
             var employee = new Employee(_employeeRepository.GetEmployeeByName(name));
 
+            // List<Employee> employee = new List<Employee>();
+
+            // employee.Add(new Employee(_employeeRepository.GetEmployeeByName(name)));
+
             Log.Info("Found employee: " + employee);
             return new EmployeeResponse(employee);
         }
@@ -42,7 +46,7 @@ namespace ShipIt.Controllers
                 .Select(e => new Employee(e));
 
             Log.Info(String.Format("Found employees: {0}", employees));
-            
+
             return new EmployeeResponse(employees);
         }
 

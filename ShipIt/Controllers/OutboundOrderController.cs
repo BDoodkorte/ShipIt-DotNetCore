@@ -89,14 +89,6 @@ namespace ShipIt.Controllers
             }
 
             // Number of trucks per order
-            // Obtain weight from Product type based on Gtin from Orderline matching with Gtin from Product.
-            // Multiply weight by quantity from OrderLine. Repeat for each product in order.
-            // Determine amount of trucks by adding all product weights together and divide by 2000. Add a truck for any remainder (modulus).
-
-            // use products dictionary to obtain weight for each product. 
-            // for each orderline.Gtin loop through the products dictionary and find the matching key and retreive weight for the matching value. 
-            // multiply by orderline.Quantity
-
             float TotalWeight = 0;
             double Trucks = 0;
             foreach (var orderLine in request.OrderLines)
