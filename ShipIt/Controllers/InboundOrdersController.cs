@@ -7,6 +7,10 @@ using ShipIt.Models.ApiModels;
 using ShipIt.Models.DataModels;
 using ShipIt.Repositories;
 
+// Ways to run code quicker
+// Add index to table (if not yet present)
+// Change Query so it gets all products for all stock rather than check per stock item (see lines 46-48)
+
 namespace ShipIt.Controllers
 {
     [Route("orders/inbound")]
