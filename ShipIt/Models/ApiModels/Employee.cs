@@ -18,14 +18,11 @@ namespace ShipIt.Models.ApiModels
 
         public Employee(EmployeeDataModel dataModel)
         {
-
             Name = dataModel.Name;
             WarehouseId = dataModel.WarehouseId;
             role = MapDatabaseRoleToApiRole(dataModel.Role);
             ext = dataModel.Ext;
             EmId = dataModel.EmId;
-
-
         }
 
         private EmployeeRole MapDatabaseRoleToApiRole(string databaseRole)

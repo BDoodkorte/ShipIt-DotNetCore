@@ -90,13 +90,39 @@ namespace ShipIt.Controllers
 
             // Number of trucks per order
             float TotalWeight = 0;
-            double Trucks = 0;
+            double TruckCount = 0;
+
+            var Trucks = new List<List<OrderLine>>();
+
             foreach (var orderLine in request.OrderLines)
             {
-                TotalWeight += products[orderLine.gtin].Weight * orderLine.quantity;
-
+                var OrderLineWeight = products[orderLine.gtin].Weight * orderLine.quantity;
+                TotalWeight += OrderLineWeight;
+                var addedToTruck = false;
+                foreach (var truck in Trucks)
+                {
+                    var TruckWeightSoFar = truck.Select(truckOrderLine => products[truckOrderLine.gtin].Weight * truckOrderLine.quantity).Sum();
+                    if (TruckWeightSoFar + OrderLineWeight <= 2000)
+                    {
+                        truck.Add(orderLine);
+                        addedToTruck = true;
+                        break;
+                    }
+                }
+                if (!addedToTruck)
+                {
+                    var newTruck = new List<OrderLine>();
+                    newTruck.Add(orderLine);
+                    Trucks.Add(newTruck);
+                }
             }
-            Trucks = Math.Ceiling(TotalWeight/2000);
+            TruckCount = Math.Ceiling(TotalWeight / 2000);
+
+            // Create Truck model that contains List<OrderLines> and TruckWeight
+            // Create Trucks response model that contains TruckCount List<Truck>
+            //What items go in each truck
+            // Total weight per truck
+            // TruckCount
 
             // Log.Info(String.Format("Amount of trucks needed for order xx equals nrTrucks", request));
 
@@ -107,7 +133,7 @@ namespace ShipIt.Controllers
 
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
 
-            return Trucks;
+            return TruckCount;
         }
     }
 }
