@@ -13,6 +13,7 @@ namespace ShipItTest.Builders
         private int WarehouseId = 1;
         private EmployeeRole Role = EmployeeRole.OPERATIONS_MANAGER;
         private String Ext = "73996";
+        private int EmId = 5;
 
         public EmployeeBuilder setName(String name)
         {
@@ -38,6 +39,12 @@ namespace ShipItTest.Builders
             return this;
         }
 
+        public EmployeeBuilder setEmId(int emId)
+        {
+            this.EmId = emId;
+            return this;
+        }
+
         public EmployeeDataModel CreateEmployeeDataModel()
         {
             return new EmployeeDataModel()
@@ -45,17 +52,20 @@ namespace ShipItTest.Builders
                 Name = this.Name,
                 WarehouseId = this.WarehouseId,
                 Role = this.Role.ToString(),
-                Ext = this.Ext
+                Ext = this.Ext,
+                EmId = this.EmId
             };
         }
 
         public Employee CreateEmployee()
         {
-            return new Employee() {
+            return new Employee()
+            {
                 Name = this.Name,
                 WarehouseId = this.WarehouseId,
                 role = this.Role,
-                ext = this.Ext
+                ext = this.Ext,
+                EmId = this.EmId
             };
         }
 
@@ -70,7 +80,9 @@ namespace ShipItTest.Builders
                         Name = this.Name,
                         WarehouseId = this.WarehouseId,
                         role = this.Role,
-                        ext = this.Ext
+                        ext = this.Ext,
+                        EmId = this.EmId
+
                     }
                 }
             };

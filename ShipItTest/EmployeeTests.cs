@@ -17,6 +17,7 @@ namespace ShipItTest
 
         private const string NAME = "Gissell Sadeem";
         private const int WAREHOUSE_ID = 1;
+        private const int EMID = 5;
 
         [Test]
         public void TestRoundtripEmployeeRepository()
@@ -24,18 +25,20 @@ namespace ShipItTest
             onSetUp();
             var employee = new EmployeeBuilder().CreateEmployee();
             employeeRepository.AddEmployees(new List<Employee>() {employee});
-            Assert.AreEqual(employeeRepository.GetEmployeeByName(employee.Name).Name, employee.Name);
-            Assert.AreEqual(employeeRepository.GetEmployeeByName(employee.Name).Ext, employee.ext);
-            Assert.AreEqual(employeeRepository.GetEmployeeByName(employee.Name).WarehouseId, employee.WarehouseId);
+            Assert.AreEqual(employeeRepository.GetEmployeeByName(employee.EmId).Name, employee.Name);
+            Assert.AreEqual(employeeRepository.GetEmployeeByName(employee.EmId).Ext, employee.ext);
+            Assert.AreEqual(employeeRepository.GetEmployeeByName(employee.EmId).WarehouseId, employee.WarehouseId);
+            Assert.AreEqual(employeeRepository.GetEmployeeByName(employee.EmId).EmId, employee.EmId);
+
         }
 
         [Test]
-        public void TestGetEmployeeByName()
+        public void TestGetEmployeeById()
         {
             onSetUp();
-            var employeeBuilder = new EmployeeBuilder().setName(NAME);
+            var employeeBuilder = new EmployeeBuilder().setEmId(EMID);
             employeeRepository.AddEmployees(new List<Employee>() {employeeBuilder.CreateEmployee()});
-            var result = employeeController.Get(NAME);
+            var result = employeeController.GetEM(EMID);
 
             var correctEmployee = employeeBuilder.CreateEmployee();
             Assert.IsTrue(EmployeesAreEqual(correctEmployee, result.Employees.First()));
@@ -46,8 +49,8 @@ namespace ShipItTest
         public void TestGetEmployeesByWarehouseId()
         {
             onSetUp();
-            var employeeBuilderA = new EmployeeBuilder().setWarehouseId(WAREHOUSE_ID).setName("A");
-            var employeeBuilderB = new EmployeeBuilder().setWarehouseId(WAREHOUSE_ID).setName("B");
+            var employeeBuilderA = new EmployeeBuilder().setWarehouseId(WAREHOUSE_ID).setName("A").setEmId(4);
+            var employeeBuilderB = new EmployeeBuilder().setWarehouseId(WAREHOUSE_ID).setName("B").setEmId(7);
             employeeRepository.AddEmployees(new List<Employee>() { employeeBuilderA.CreateEmployee(), employeeBuilderB.CreateEmployee() });
             var result = employeeController.Get(WAREHOUSE_ID).Employees.ToList();
 
@@ -65,12 +68,12 @@ namespace ShipItTest
             onSetUp();
             try
             {
-                employeeController.Get(NAME);
+                employeeController.GetEM(EMID);
                 Assert.Fail("Expected exception to be thrown.");
             }
             catch (NoSuchEntityException e)
             {
-                Assert.IsTrue(e.Message.Contains(NAME));
+                Assert.IsTrue(e.Message.Contains(EMID.ToString()));
             }
         }
 
@@ -93,15 +96,15 @@ namespace ShipItTest
         public void TestAddEmployees()
         {
             onSetUp();
-            var employeeBuilder = new EmployeeBuilder().setName(NAME);
+            var employeeBuilder = new EmployeeBuilder().setEmId(EMID);
             var addEmployeesRequest = employeeBuilder.CreateAddEmployeesRequest();
 
             var response = employeeController.Post(addEmployeesRequest);
-            var databaseEmployee = employeeRepository.GetEmployeeByName(NAME);
-            var correctDatabaseEmploye = employeeBuilder.CreateEmployee();
+            var databaseEmployee = employeeRepository.GetEmployeeByName(EMID);
+            var correctDatabaseEmployee = employeeBuilder.CreateEmployee();
 
             Assert.IsTrue(response.Success);
-            Assert.IsTrue(EmployeesAreEqual(new Employee(databaseEmployee), correctDatabaseEmploye));
+            Assert.IsTrue(EmployeesAreEqual(new Employee(databaseEmployee), correctDatabaseEmployee));
         }
 
         [Test]
@@ -111,17 +114,17 @@ namespace ShipItTest
             var employeeBuilder = new EmployeeBuilder().setName(NAME);
             employeeRepository.AddEmployees(new List<Employee>() { employeeBuilder.CreateEmployee() });
 
-            var removeEmployeeRequest = new RemoveEmployeeRequest() { Name = NAME };
+            var removeEmployeeRequest = new RemoveEmployeeRequest() { EmId = EMID };
             employeeController.Delete(removeEmployeeRequest);
 
             try
             {
-                employeeController.Get(NAME);
+                employeeController.GetEM(EMID);
                 Assert.Fail("Expected exception to be thrown.");
             }
             catch (NoSuchEntityException e)
             {
-                Assert.IsTrue(e.Message.Contains(NAME));
+                Assert.IsTrue(e.Message.Contains(EMID.ToString()));
             }
         }
 
@@ -129,7 +132,7 @@ namespace ShipItTest
         public void TestDeleteNonexistentEmployee()
         {
             onSetUp();
-            var removeEmployeeRequest = new RemoveEmployeeRequest() { Name = NAME };
+            var removeEmployeeRequest = new RemoveEmployeeRequest() { EmId = EMID };
 
             try
             {
@@ -138,7 +141,7 @@ namespace ShipItTest
             }
             catch (NoSuchEntityException e)
             {
-                Assert.IsTrue(e.Message.Contains(NAME));
+                Assert.IsTrue(e.Message.Contains(EMID.ToString()));
             }
         }
 
@@ -166,7 +169,8 @@ namespace ShipItTest
             return A.WarehouseId == B.WarehouseId
                    && A.Name == B.Name
                    && A.role == B.role
-                   && A.ext == B.ext;
+                   && A.ext == B.ext
+                   && A.EmId == B.EmId;
         }
     }
 }
