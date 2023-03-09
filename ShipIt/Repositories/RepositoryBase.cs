@@ -98,7 +98,7 @@ namespace ShipIt.Repositories
         // .Single causing an error when 2 names are the sameas it returns only when 1 value is available. Change to another method? 
                 protected TDataModel RunSingleGetQuery<TDataModel>(string sql, Func<IDataReader, TDataModel> mapToDataModel, string noResultsExceptionMessage, params NpgsqlParameter[] parameters)
         {
-            return RunGetQuery(sql, mapToDataModel, noResultsExceptionMessage, parameters).Single();
+            return RunGetQuery(sql, mapToDataModel, noResultsExceptionMessage, parameters).First();
         }
 
         protected IEnumerable<TDataModel> RunGetQuery<TDataModel>(string sql, Func<IDataReader, TDataModel> mapToDataModel, string noResultsExceptionMessage, params NpgsqlParameter[] parameters)

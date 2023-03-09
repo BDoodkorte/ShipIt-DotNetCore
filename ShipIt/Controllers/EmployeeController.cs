@@ -28,9 +28,7 @@ namespace ShipIt.Controllers
 
             var employee = new Employee(_employeeRepository.GetEmployeeByName(name));
 
-            // List<Employee> employee = new List<Employee>();
-
-            // employee.Add(new Employee(_employeeRepository.GetEmployeeByName(name)));
+            // List<Employee> employee = _employeeRepository.GetEmployeeByName(name).Select(employeeDataModel => new Employee(employeeDataModel)).ToList();
 
             Log.Info("Found employee: " + employee);
             return new EmployeeResponse(employee);
